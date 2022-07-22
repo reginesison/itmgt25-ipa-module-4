@@ -5,6 +5,9 @@ Parsing Data
 This assignment covers your ability to manipulate data in Python.
 '''
 
+from hashlib import new
+
+
 def relationship_status(from_member, to_member, social_graph):
     '''Relationship Status.
     20 points.
@@ -84,36 +87,39 @@ def tic_tac_toe(board):
 
     # diagonals
     if len(set([board[element][element] for element in range(len(board))])) == 1:
-        return board[0][0]
+        print("diagonal 1", board[0][0])
+        if board[0][0] == "":
+                return "NO WINNER"
+        else: return board[0][0]
     elif len(set([board[element][len(board)-element-1] for element in range(len(board))])) == 1:
-        return board[0][len(board)-1]
+        print("diagonal 2", board[0][len(board)-1])
+        if board[0][len(board)-1] == "":
+                return "NO WINNER"
+        else: return board[0][len(board)-1]
     
     # rows
     for element in range(len(board)-1):
         if (board[element][element] != None) and (board[element][0] == board[element][1]) and (board[element][1] == board[element][2]):
-            return board[element][element]
+            print("rows", board[element][element])
+            if board[element][element] == "":
+                return "NO WINNER"
+            else: return board[element][element]
         else: continue
 
     # columns
-
     for element in range(len(board)):
         if (board[0][element] != None) and (board[0][element] == board[1][element]) and (board[1][element] == board[2][element]):
-            return board[0][element]
+            print("columns", board[0][element])
+            if board[0][element] == "":
+                return "NO WINNER"
+            else: return board[0][element]
         else: continue 
+
+
+    print("NO WINNER")
+    return("NO WINNER")
             
 # print(tic_tac_toe(board7))
-
-legs = {
-    ("upd","admu"):{
-        "travel_time_mins":10
-    },
-    ("admu","dlsu"):{
-        "travel_time_mins":35
-    },
-    ("dlsu","upd"):{
-        "travel_time_mins":55
-    }
-}
 
 def eta(first_stop, second_stop, route_map):
     '''ETA. 
@@ -147,29 +153,27 @@ def eta(first_stop, second_stop, route_map):
     # Replace `pass` with your code. 
     # Stay within the function. Only use the parameters as input. The function should return your answer.
 
-    if first_stop != second_stop:
-        if (first_stop,second_stop) in route_map:
-            time = route_map[first_stop,second_stop]['travel_time_mins']
-            # print((first_stop,second_stop), time)
-
-            return time
-        else:            
-            newList = list(route_map.keys())
-            sourceList = []
-            destinationList = []
-            for i in newList:
-                sourceList.append(i[0])
-                destinationList.append(i[1])
-                
-            time = route_map[newList[sourceList.index(first_stop)]]['travel_time_mins'] + route_map[newList[destinationList.index(second_stop)]]['travel_time_mins']
-
-            # print((first_stop,second_stop), time)
-
-            return time
     
-    else:
-        # print((first_stop,second_stop), 0)
+    newList = list(route_map.keys())
+    routes = []
+    time = 0
 
-        return 0
+    first_stop_temp = first_stop
+    # while first_stop != second_stop:
+    for n in newList:
+        if n[0] == first_stop_temp:
+            routes.append(n)
+            first_stop_temp = n[1]
+            if first_stop_temp == second_stop:
+                break
+        else: newList.append(n)
 
-eta("admu","upd", legs)
+        print(n, first_stop_temp, second_stop)
+    
+    for r in routes:
+        time += route_map[r]['travel_time_mins']
+
+    print(time, routes)
+    return time
+
+# eta("a2","a1", legs)
